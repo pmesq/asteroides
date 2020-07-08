@@ -1,0 +1,69 @@
+html {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	background: black;
+}
+
+h1 {
+	color: white;
+	text-align: center;
+	font-family: 'Roboto', sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+canvas {
+	border: 2px solid white;
+	display: block;
+	margin: 0 auto;
+	cursor: none;
+}
+
+footer {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	color: white;
+}
+
+p {
+	margin: 0;
+	padding: 0;
+	font-family: 'Roboto', sans-serif;
+}
+
+a {
+	color: white;
+	transition: all 100ms ease;
+}
+
+a:hover {
+	color: goldenrod;
+}
+
+svg {
+	width: 48px;
+	height: 48px;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	border-radius: 100%;
+	border: 2px solid white;
+	background-color: white;
+	cursor: pointer;
+	transition: all 100ms ease;
+}
+
+svg:hover {
+	background-color: goldenrod;
+	border-color: goldenrod;
+}
