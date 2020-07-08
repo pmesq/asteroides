@@ -1,0 +1,10 @@
+{
+	"name": "asteroides",
+	"version": "0.1.0",
+	"description": "Jogo 2D de tiro no espaço",
+	"main": "src/index.ts",
+	"repository": "https://github.com/pcesarmf/asteroides.git",
+	"author": "pcesarmf",
+	"license": "MIT",
+	"private": false
+}
