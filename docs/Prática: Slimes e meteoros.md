@@ -37,4 +37,4 @@ Faça o personagem principal seguir a posição do mouse.
 
 ## Desafio 1: Animação com spritesheet
 
-Crie uma animação usando a técnica de spritesheets. Você deve seguir esta [explicação explorável sobre animação com spritesheets](https://fegemo.github.io/spritesheet-animation) (LINK AINDA INDISPONÍVEL) para poder usar essa técnica para, por exemplo, o personagem principal.
+Crie uma animação usando a técnica de spritesheets. Você deve seguir esta [explicação explorável sobre animação com spritesheets](https://fegemo.github.io/spritesheet-animation) para poder usar essa técnica para, por exemplo, o personagem principal.
