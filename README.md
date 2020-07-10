@@ -6,4 +6,4 @@ Este jogo está sendo desenvolvido em atividades práticas do curso livre de Jog
 
 ## Enunciados
 
--   [Prática: Slimes e meteoros](docs/Prática:%20Slimes%20e%20meteoros.md)
+-   [Prática: Slimes e meteoros](docs/enunciado-0.md)
