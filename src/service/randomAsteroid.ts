@@ -23,14 +23,14 @@ export default (canvas: HTMLCanvasElement): Asteroid => {
 			]
 			break
 		case 1:
-			position = [600 + radius, Math.random() * offsetHeight]
+			position = [offsetWidth + radius, Math.random() * offsetHeight]
 			velocity = [
 				(-Math.random() * vxMult) / 2,
 				Math.random() * vyMult - vyMult / 2,
 			]
 			break
 		case 2:
-			position = [Math.random() * offsetWidth, 600 + radius]
+			position = [Math.random() * offsetWidth, offsetHeight + radius]
 			velocity = [
 				Math.random() * vxMult - vxMult / 2,
 				(-Math.random() * vyMult) / 2,
