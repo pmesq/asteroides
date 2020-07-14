@@ -1,71 +1,93 @@
+import Circle from './Circle'
+import Disappearable from './Disappearable'
 import Drawable from './Drawable'
+import Movable from './Movable'
 import orbitalPosition from '../service/orbitalPosition'
 import degreesToRadians from '../service/degreesToRadians'
 
-export default class Asteroid implements Drawable {
-	private position: [number, number]
-	private velocity: [number, number]
-	private angularVelocity: number
-	private radius: number
-	private angle: number
+export default class Asteroid
+	implements Circle, Disappearable, Drawable, Movable {
+	private _centerPosition: [number, number]
+	private _velocity: [number, number]
+	private _angularVelocity: number
+	private _radius: number
+	private _angle: number
 
-	constructor(
-		position: [number, number],
+	public constructor(
+		centerPosition: [number, number],
 		velocity: [number, number],
 		angularVelocity: number,
 		radius: number,
 	) {
-		this.position = position
-		this.velocity = velocity
-		this.angularVelocity = angularVelocity
-		this.radius = radius
-		this.angle = Math.PI / 2
+		this._centerPosition = centerPosition
+		this._velocity = velocity
+		this._angularVelocity = angularVelocity
+		this._radius = radius
+		this._angle = Math.PI / 2
 	}
 
-	getPosition(): [number, number] {
-		return this.position
+	public get centerPosition() {
+		return this._centerPosition
 	}
 
-	setPosition(position: [number, number]): void {
-		this.position = position
+	public get velocity() {
+		return this._velocity
 	}
 
-	getAngle() {
-		return this.angle
+	public get angularVelocity() {
+		return this._angularVelocity
 	}
 
-	getRadius() {
-		return this.radius
+	public get radius() {
+		return this._radius
 	}
 
-	move(): void {
-		const [x, y] = this.position
+	public get angle() {
+		return this._angle
+	}
+
+	public move(): void {
+		const [x, y] = this.centerPosition
 		const [vx, vy] = this.velocity
-		this.position = [x + vx, y + vy]
-		this.angle += this.angularVelocity
+		this._centerPosition = [x + vx, y + vy]
+		this._angle += this.angularVelocity
 	}
 
-	draw(ctx: CanvasRenderingContext2D): void {
-		const { position, angle, radius } = this
+	public disappearedFrom({
+		offsetWidth,
+		offsetHeight,
+	}: HTMLCanvasElement): boolean {
+		const [x, y] = this.centerPosition
+		const { radius } = this
+		return (
+			x < -radius ||
+			x > offsetWidth + radius ||
+			y < -radius ||
+			y > offsetHeight + radius
+		)
+	}
+
+	public draw(ctx: CanvasRenderingContext2D): void {
+		const { centerPosition, angle, radius } = this
 		ctx.strokeStyle = 'Black'
 		ctx.fillStyle = 'rgb(180,180,180)'
 		ctx.beginPath()
-		ctx.arc(position[0], position[1], this.radius, 0, Math.PI * 2)
+		ctx.arc(centerPosition[0], centerPosition[1], radius, 0, Math.PI * 2)
 		ctx.closePath()
 		ctx.stroke()
 		ctx.fill()
 		ctx.beginPath()
 		const [x1, y1] = orbitalPosition(
-			position,
+			centerPosition,
 			radius / 2,
 			angle + degreesToRadians(135),
 		)
-		ctx.arc(x1, y1, this.radius / 10, 0, Math.PI * 2)
+		ctx.arc(x1, y1, radius / 10, 0, Math.PI * 2)
 		ctx.closePath()
 		ctx.stroke()
 		ctx.beginPath()
 		const [x2, y2] = orbitalPosition(
-			position,
+			centerPosition,
 			radius / 3,
 			angle + degreesToRadians(300),
 		)
@@ -74,7 +96,7 @@ export default class Asteroid implements Drawable {
 		ctx.stroke()
 		ctx.beginPath()
 		const [x3, y3] = orbitalPosition(
-			position,
+			centerPosition,
 			radius / 1.4,
 			angle + degreesToRadians(90),
 		)

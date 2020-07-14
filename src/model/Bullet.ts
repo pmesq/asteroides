@@ -1,59 +1,95 @@
+import Disappearable from './Disappearable'
 import Drawable from './Drawable'
+import Movable from './Movable'
+import Polygon from './Polygon'
 import orbitalPosition from '../service/orbitalPosition'
 import degreesToRadians from '../service/degreesToRadians'
 
-export default class Bullet implements Drawable {
-	private position: [number, number]
-	private angle: number
-	private velocity: [number, number]
-	private halfDiagonal: number
+export default class Bullet
+	implements Disappearable, Drawable, Movable, Polygon {
+	private _centerPosition: [number, number]
+	private _angle: number
+	private _velocity: [number, number]
+	private _halfDiagonal: number
 
-	constructor(position: [number, number], angle: number, speed: number) {
-		this.position = position
-		this.angle = angle
-		this.velocity = [Math.cos(angle) * speed, -Math.sin(angle) * speed]
-		this.halfDiagonal = 15
+	public constructor(
+		centerPosition: [number, number],
+		angle: number,
+		speed: number,
+	) {
+		this._centerPosition = centerPosition
+		this._angle = angle
+		this._velocity = [Math.cos(angle) * speed, -Math.sin(angle) * speed]
+		this._halfDiagonal = 15
 	}
 
-	getPosition(): [number, number] {
-		return this.position
+	public get centerPosition() {
+		return this._centerPosition
 	}
 
-	getAngle(): number {
-		return this.angle
+	public get angle() {
+		return this._angle
 	}
 
-	getVelocity(): [number, number] {
-		return this.velocity
+	public get velocity() {
+		return this._velocity
 	}
 
-	getHalfDiagonal(): number {
-		return this.halfDiagonal
+	public get halfDiagonal() {
+		return this._halfDiagonal
 	}
 
-	move(): void {
-		const [x, y] = this.position
+	public get vertexes() {
+		return [
+			orbitalPosition(
+				this.centerPosition,
+				this.halfDiagonal,
+				this.angle + degreesToRadians(30),
+			),
+			orbitalPosition(
+				this.centerPosition,
+				this.halfDiagonal,
+				this.angle + degreesToRadians(150),
+			),
+			orbitalPosition(
+				this.centerPosition,
+				this.halfDiagonal,
+				this.angle + degreesToRadians(210),
+			),
+			orbitalPosition(
+				this.centerPosition,
+				this.halfDiagonal,
+				this.angle + degreesToRadians(330),
+			),
+		]
+	}
+
+	public move(): void {
+		const [x, y] = this.centerPosition
 		const [vx, vy] = this.velocity
-		this.position = [x + vx, y + vy]
+		this._centerPosition = [x + vx, y + vy]
 	}
 
-	draw(ctx: CanvasRenderingContext2D): void {
-		const { position, angle, halfDiagonal } = this
-		const radius = halfDiagonal
+	public disappearedFrom({
+		offsetWidth,
+		offsetHeight,
+	}: HTMLCanvasElement): boolean {
+		return (
+			this.vertexes.find(
+				([x, y]: [number, number]) =>
+					x >= 0 && x <= offsetWidth && y >= 0 && y <= offsetHeight,
+			) === undefined
+		)
+	}
+
+	public draw(ctx: CanvasRenderingContext2D): void {
+		const { vertexes } = this
 		ctx.fillStyle = 'GoldenRod'
 		ctx.beginPath()
-		ctx.moveTo(
-			...orbitalPosition(position, radius, angle + degreesToRadians(30)),
-		)
-		ctx.lineTo(
-			...orbitalPosition(position, radius, angle + degreesToRadians(150)),
-		)
-		ctx.lineTo(
-			...orbitalPosition(position, radius, angle + degreesToRadians(210)),
-		)
-		ctx.lineTo(
-			...orbitalPosition(position, radius, angle + degreesToRadians(330)),
-		)
+		ctx.moveTo(...vertexes[0])
+		ctx.lineTo(...vertexes[1])
+		ctx.lineTo(...vertexes[2])
+		ctx.lineTo(...vertexes[3])
 		ctx.closePath()
 		ctx.fill()
 	}

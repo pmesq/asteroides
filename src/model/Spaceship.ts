@@ -1,47 +1,60 @@
 import Drawable from './Drawable'
+import Polygon from './Polygon'
 import orbitalPosition from '../service/orbitalPosition'
 import degreesToRadians from '../service/degreesToRadians'
 
-export default class Spaceship implements Drawable {
-	private position: [number, number]
-	private angle: number
+export default class Spaceship implements Drawable, Polygon {
+	private _centerPosition: [number, number]
+	private _angle: number
 
-	constructor(position: [number, number]) {
-		this.position = position
-		this.angle = Math.PI / 2
+	public constructor(position: [number, number]) {
+		this._centerPosition = position
+		this._angle = Math.PI / 2
 	}
 
-	getPosition(): [number, number] {
-		return this.position
+	public get centerPosition() {
+		return this._centerPosition
 	}
 
-	setPosition(position: [number, number]): void {
-		const [oldX, oldY] = this.position
-		const [newX, newY] = position
+	public set centerPosition(centerPosition: [number, number]) {
+		const [oldX, oldY] = this.centerPosition
+		const [newX, newY] = centerPosition
 		const [dx, dy] = [oldX - newX, oldY - newY]
 		const d = Math.sqrt(dx * dx + dy * dy)
 		if (d > 5) {
-			this.angle = Math.atan2(oldY - newY, newX - oldX)
+			this._angle = Math.atan2(oldY - newY, newX - oldX)
 		}
-		this.position = position
+		this._centerPosition = centerPosition
 	}
 
-	getAngle() {
-		return this.angle
+	public get angle() {
+		return this._angle
 	}
 
-	draw(ctx: CanvasRenderingContext2D): void {
-		const { position, angle } = this
+	public get vertexes() {
+		return [
+			orbitalPosition(this.centerPosition, 20, this.angle),
+			orbitalPosition(
+				this.centerPosition,
+				15,
+				this.angle + degreesToRadians(135),
+			),
+			orbitalPosition(
+				this.centerPosition,
+				15,
+				this.angle + degreesToRadians(225),
+			),
+		]
+	}
+
+	public draw(ctx: CanvasRenderingContext2D): void {
+		const { vertexes } = this
 		ctx.strokeStyle = 'Black'
 		ctx.fillStyle = 'HotPink'
 		ctx.beginPath()
-		ctx.moveTo(...orbitalPosition(position, 20, angle))
-		ctx.lineTo(
-			...orbitalPosition(position, 15, angle + degreesToRadians(135)),
-		)
-		ctx.lineTo(
-			...orbitalPosition(position, 15, angle + degreesToRadians(225)),
-		)
+		ctx.moveTo(...vertexes[0])
+		ctx.lineTo(...vertexes[1])
+		ctx.lineTo(...vertexes[2])
 		ctx.closePath()
 		ctx.stroke()
 		ctx.fill()
