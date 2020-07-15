@@ -69,6 +69,7 @@ export default class Asteroid
 
 	public draw(ctx: CanvasRenderingContext2D): void {
 		const { centerPosition, angle, radius } = this
+		ctx.lineWidth = 1
 		ctx.strokeStyle = 'Black'
 		ctx.fillStyle = 'rgb(180,180,180)'
 		ctx.beginPath()

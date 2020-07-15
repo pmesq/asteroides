@@ -6,10 +6,12 @@ import degreesToRadians from '../service/degreesToRadians'
 export default class Spaceship implements Drawable, Polygon {
 	private _centerPosition: [number, number]
 	private _angle: number
+	private _hp: number
 
-	public constructor(position: [number, number]) {
+	public constructor(position: [number, number], hp: number) {
 		this._centerPosition = position
 		this._angle = Math.PI / 2
+		this._hp = hp
 	}
 
 	public get centerPosition() {
@@ -47,16 +49,27 @@ export default class Spaceship implements Drawable, Polygon {
 		]
 	}
 
+	public get hp() {
+		return this._hp
+	}
+
+	public set hp(hp) {
+		this._hp = hp
+	}
+
 	public draw(ctx: CanvasRenderingContext2D): void {
-		const { vertexes } = this
-		ctx.strokeStyle = 'Black'
-		ctx.fillStyle = 'HotPink'
-		ctx.beginPath()
-		ctx.moveTo(...vertexes[0])
-		ctx.lineTo(...vertexes[1])
-		ctx.lineTo(...vertexes[2])
-		ctx.closePath()
-		ctx.stroke()
-		ctx.fill()
+		if (this.hp > 0) {
+			const { vertexes } = this
+			ctx.lineWidth = 5
+			ctx.strokeStyle = 'DarkGoldenRod'
+			ctx.fillStyle = 'White'
+			ctx.beginPath()
+			ctx.moveTo(...vertexes[0])
+			ctx.lineTo(...vertexes[1])
+			ctx.lineTo(...vertexes[2])
+			ctx.closePath()
+			ctx.stroke()
+			ctx.fill()
+		}
 	}
 }
